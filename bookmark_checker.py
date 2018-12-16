@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup as bs
 import requests
 from multiprocessing.dummy import Pool
 
-localPath="C:\\Users\\young\\Desktop\\bookmarks_2018_12_15.html"
+localPath=" "#修改路径
 
 def getUrls(path):
     urls=[]
