@@ -3,7 +3,7 @@ import requests
 from multiprocessing.dummy import Pool
 import os
 
-localPath="C:\\Users\\young\\Desktop\\bookmarks_2019_2_22.html"#修改路径
+localPath="C:\\Users\\young\\Desktop\\bookmarks_2019_5_19.html"#修改路径
 
 def getUrls(path):
     urls=[]
