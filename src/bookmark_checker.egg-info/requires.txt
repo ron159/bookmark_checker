@@ -1,2 +1,0 @@
-beautifulsoup4>=4.12
-requests[socks]>=2.32
