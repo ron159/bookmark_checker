@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bookmark-checker"
+version = "0.1.0"
+description = "CLI tool for checking browser bookmark exports in HTML format."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "beautifulsoup4>=4.12",
+  "requests[socks]>=2.32",
+]
+
+[project.scripts]
+bookmark-checker = "bookmark_checker.cli:main"
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]

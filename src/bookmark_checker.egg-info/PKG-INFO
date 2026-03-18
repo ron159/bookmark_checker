@@ -1,3 +1,12 @@
+Metadata-Version: 2.4
+Name: bookmark-checker
+Version: 0.1.0
+Summary: CLI tool for checking browser bookmark exports in HTML format.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: beautifulsoup4>=4.12
+Requires-Dist: requests[socks]>=2.32
+
 # bookmark_checker
 
 检查浏览器导出的 HTML 书签文件，批量识别失效链接、超时链接和可能被网站拦截的链接。
@@ -9,7 +18,6 @@
 ```text
 src/bookmark_checker/
   cli.py
-  comparison.py
   config.py
   models.py
   parser.py
@@ -22,7 +30,6 @@ src/bookmark_checker/
 - `cli.py`: 命令行入口和退出码
 - `parser.py`: 书签 HTML 解析和域名过滤
 - `checker.py`: 链接检查、状态分类、重试、并发
-- `comparison.py`: 两次检查结果对比
 - `reporter.py`: CSV/JSON 输出和摘要
 - `models.py`: 领域模型
 
@@ -64,22 +71,14 @@ python -m bookmark_checker check /path/to/bookmarks.html
 
 ```bash
 bookmark-checker check /path/to/bookmarks.html \
-  --format html \
-  --output report.html \
+  --format csv \
+  --output result.csv \
   --workers 30 \
   --timeout 8 \
   --retries 2 \
   --proxy socks5://127.0.0.1:7891 \
   --only-problems \
   --verbose
-```
-
-生成 JSON 结果，便于后续做 diff：
-
-```bash
-bookmark-checker check /path/to/bookmarks.html \
-  --format json \
-  --output result.json
 ```
 
 只检查某些域名：
@@ -98,37 +97,17 @@ bookmark-checker check /path/to/bookmarks.html \
   --exclude-domain internal.example.com
 ```
 
-对比两次结果：
-
-```bash
-bookmark-checker diff previous.json current.json
-```
-
-输出 JSON 差异数据：
-
-```bash
-bookmark-checker diff previous.json current.json \
-  --format json \
-  --output diff.json
-```
-
 ## 输出格式
 
 支持：
 
 - `csv`
 - `json`
-- `html`
 
 默认输出文件：
 
 - `bookmark_check_results.csv`
 - `bookmark_check_results.json`
-- `bookmark_check_results.html`
-
-`diff` 默认输出：
-
-- `bookmark_check_diff.html`
 
 输出字段：
 
@@ -140,20 +119,6 @@ bookmark-checker diff previous.json current.json \
 - `final_url`
 - `is_problem`
 - `is_uncertain`
-
-HTML 报告包含：
-
-- 顶部摘要卡片
-- 状态统计
-- 可筛查的大表格
-- 面向人工查看的可读布局
-
-`diff` 报告包含：
-
-- 旧结果与新结果汇总
-- 新增、移除、变化、未变化数量
-- 回归数量和恢复数量
-- 逐条变化明细
 
 ## 状态说明
 
@@ -174,32 +139,6 @@ HTML 报告包含：
 - `0`: 没有明确异常
 - `1`: 存在明确异常链接
 - `2`: 参数错误或输入文件错误
-
-`diff` 退出码：
-
-- `0`: 没有回归
-- `1`: 检测到回归
-- `2`: 结果文件错误或参数错误
-
-## 推荐工作流
-
-第一次生成基线：
-
-```bash
-bookmark-checker check bookmarks.html --format json --output baseline.json
-```
-
-下一次检查：
-
-```bash
-bookmark-checker check bookmarks.html --format json --output latest.json
-```
-
-生成差异报告：
-
-```bash
-bookmark-checker diff baseline.json latest.json --format html --output diff.html
-```
 
 ## 测试
 

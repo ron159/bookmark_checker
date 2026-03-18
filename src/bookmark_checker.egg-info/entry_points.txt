@@ -1,0 +1,2 @@
+[console_scripts]
+bookmark-checker = bookmark_checker.cli:main
